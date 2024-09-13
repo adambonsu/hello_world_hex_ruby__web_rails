@@ -24,10 +24,11 @@ rvm use 3.0.0@hello-world-hex-ruby--web-rails
 ```bash
 cd hello_world_hex_ruby__web__rails
 gem install bundler
-export `cat ../.env | xargs`
+export `cat .env | xargs`
 bundle install
 
 ```
+
 
 ### Start server
 ```bash
@@ -35,11 +36,6 @@ rails server
 
 ```
 Navigate to http://127.0.0.1:3000/greetings/hello
-
-
-## To do
-* Create a `./bin/setup` like the core project that sets up the rvm and the environment
-* Create a pipeline
 
 
 Things you may want to cover:
