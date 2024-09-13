@@ -13,11 +13,16 @@ GITHUB_PERSONAL_ACCESS_TOKEN=YOUR_GITHUB_PERSONAL_ACCESS_TOKEN
 
 ```
 Create a clean development environment
-```
+```bash
 rvm use 3.0.0
 rvm gemset create hello-world-hex-ruby--web-rails
 rvm use 3.0.0@hello-world-hex-ruby--web-rails
-cd hello-world-hex-ruby--web-rails
+
+```
+
+### Initialise local environment
+```bash
+cd hello_world_hex_ruby__web__rails
 gem install bundler
 export `cat ../.env | xargs`
 bundle install
@@ -25,14 +30,14 @@ bundle install
 ```
 
 ### Start server
-```
+```bash
 rails server
 
 ```
 Navigate to http://127.0.0.1:3000/greetings/hello
 
 
-## To do
+## To do
 * Create a `./bin/setup` like the core project that sets up the rvm and the environment
 * Create a pipeline
 
