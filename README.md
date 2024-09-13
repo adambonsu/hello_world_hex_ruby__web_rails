@@ -5,7 +5,7 @@ application up and running.
 
 
 ## Development
-### Set up
+### Set up local environment
 Create an .env file in the root and populate it as follows:
 ```
 GITHUB_USERNAME=YOUR_GITHUB_USERNAME
@@ -17,15 +17,24 @@ Create a clean development environment
 rvm use 3.0.0
 rvm gemset create hello-world-hex-ruby--web-rails
 rvm use 3.0.0@hello-world-hex-ruby--web-rails
+cd hello-world-hex-ruby--web-rails
 gem install bundler
 export `cat ../.env | xargs`
 bundle install
 
 ```
 
+### Start server
+```
+rails server
+
+```
+Navigate to http://127.0.0.1:3000/greetings/hello
+
 
 ## To do
-Create a `./bin/setup` like the core project that sets up the rvm and the environment
+* Create a `./bin/setup` like the core project that sets up the rvm and the environment
+* Create a pipeline
 
 
 Things you may want to cover:

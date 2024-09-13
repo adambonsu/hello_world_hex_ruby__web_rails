@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.pkg.github.com/adambonsu/
   specs:
-    hello_world_hex_ruby (0.0.5)
+    hello_world_hex_ruby (0.0.6)
 
 GEM
   remote: https://rubygems.org/
