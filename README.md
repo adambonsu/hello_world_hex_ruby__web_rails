@@ -52,7 +52,7 @@ Navigate to http://127.0.0.1:3000
 
 Find diffs between ci-cd and main
 ```bash
-git diff ci-cd..main  --name-only
+git diff ci-cd..merge-working-rails-into-main  --name-only
 
 ```
 
