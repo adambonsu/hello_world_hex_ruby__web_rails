@@ -4,6 +4,12 @@ This README would normally document whatever steps are necessary to get the
 application up and running.
 
 
+## Steps used to create inital app
+```bash
+docker-compose -f ./src/docker-compose.yml run --no-deps web rails new . --force --skip-active-record --skip-action-cable --skip-active-storage
+
+```
+
 ## Development
 ### Set up local environment
 Create an .env file in the root and populate it as follows:
@@ -14,28 +20,41 @@ GITHUB_PERSONAL_ACCESS_TOKEN=YOUR_GITHUB_PERSONAL_ACCESS_TOKEN
 ```
 Create a clean development environment
 ```bash
-rvm use 3.0.0
+rvm use 3.3.5
 rvm gemset create hello-world-hex-ruby--web-rails
-rvm use 3.0.0@hello-world-hex-ruby--web-rails
+rvm use 3.3.5@hello-world-hex-ruby--web-rails
+gem install bundler
 
 ```
 
+
 ### Initialise local environment
 ```bash
-cd hello_world_hex_ruby__web__rails
-gem install bundler
-export `cat .env | xargs`
+rvm use 3.3.5@hello-world-hex-ruby--web-rails
+cd src
 bundle install
-
+cd -
 ```
 
 
 ### Start server
+Build and start the docker container
 ```bash
-rails server
+docker-compose -f ./docker/docker-compose.yml --env-file .env up --build
 
 ```
-Navigate to http://127.0.0.1:3000/greetings/hello
+
+
+Navigate to http://127.0.0.1:3000
+
+
+
+
+Find diffs between ci-cd and main
+```bash
+git diff ci-cd..main  --name-only
+
+```
 
 
 Things you may want to cover:
@@ -57,3 +76,6 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+
+
