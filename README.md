@@ -55,7 +55,7 @@ URI: `757721680185.dkr.ecr.eu-west-2.amazonaws.com/hello-world-hex-ruby-web-rail
 
 1. Tag the image
 ```bash
-docker tag docker-web:latest 757721680185.dkr.ecr.eu-west-2.amazonaws.com/hello-world-hex-ruby-web-rails:v1
+docker tag docker-web:latest 757721680185.dkr.ecr.eu-west-2.amazonaws.com/hello-world-hex-ruby-web-rails:v2
 ```
 2. Push tagged image to ECR
 Configure cli to connect to ECR
@@ -68,7 +68,17 @@ NB: If you encounter a `no basic auth credentials` error run this `eval $( aws e
 
 
 ## ECS
+
+* Task: defines how to run your container 
+ - which containers to run, how many cpu's the container needs
+* Service: Launch Task to run 1 or more containers at the same time and connect them to Load Balancers
+
+
+
 1. Build an ECS cluster
+Create a new cluster
+
+
 
 Things you may want to cover:
 
