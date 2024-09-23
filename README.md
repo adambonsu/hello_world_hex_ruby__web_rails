@@ -50,12 +50,25 @@ Navigate to http://127.0.0.1:3000
 
 
 
-Find diffs between ci-cd and main
-```bash
-git diff ci-cd..merge-working-rails-into-main  --name-only
+## ECR
+URI: `757721680185.dkr.ecr.eu-west-2.amazonaws.com/hello-world-hex-ruby-web-rails`
 
+1. Tag the image
+```bash
+docker tag docker-web:latest 757721680185.dkr.ecr.eu-west-2.amazonaws.com/hello-world-hex-ruby-web-rails:v1
+```
+2. Push tagged image to ECR
+Configure cli to connect to ECR
+```bash
+aws ecr get-login --no-include-email --region eu-west-2
+docker push 757721680185.dkr.ecr.eu-west-2.amazonaws.com/hello-world-hex-ruby-web-rails:v1
 ```
 
+NB: If you encounter a `no basic auth credentials` error run this `eval $( aws ecr get-login --no-include-email --region eu-west-2 )` before attempting to push again
+
+
+## ECS
+1. Build an ECS cluster
 
 Things you may want to cover:
 
