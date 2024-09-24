@@ -16,6 +16,14 @@ resource "aws_security_group" "this" {
     }
 }
 
+resource "aws_vpc_security_group_ingress_rule" "allow_port_80" {
+  security_group_id = aws_security_group.this.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 80
+  ip_protocol       = "tcp"
+  to_port           = 80
+}
+
 resource "aws_ecs_cluster" "this" {
     name = var.aws_ecs_cluster_name
 }
@@ -45,42 +53,44 @@ resource "aws_ecs_task_definition" "this" {
     execution_role_arn = var.execution_role_arn
 }
 
-# resource "aws_lb" "this" {
-#     name = var.aws_lb_name
-#     internal = false
-#     load_balancer_type = "network"
-#     subnets = var.public_subnet_ids
-#     security_groups = [aws_security_group.this.id]
-# }
+resource "aws_lb" "this" {
+    name = var.aws_lb_name
+    internal = false
+    load_balancer_type = "application"
+    subnets = var.public_subnet_ids
+    security_groups = [aws_security_group.this.id]
+}
 
-# resource "aws_lb_target_group" "this" {
-#     name = var.aws_lb_target_group_name
-#     port = var.aws_security_group_port
-#     protocol = "TCP"
-#     vpc_id = var.vpc_id
+resource "aws_lb_target_group" "this" {
+    name = var.aws_lb_target_group_name
+    port = var.aws_security_group_port
+    protocol = "HTTP"
+    target_type = "ip"
+    vpc_id = var.vpc_id
 
-#     health_check {
-#         healthy_threshold = "2"
-#         protocol = "HTTP"
-#         interval = "30"
-#         matcher = "200-299"
-#         timeout = "5"
-#         path = "/"
-#         unhealthy_threshold = "2"
-#     }
+    health_check {
+        healthy_threshold = "2"
+        protocol = "HTTP"
+        interval = "30"
+        matcher = "200-299"
+        timeout = "5"
+        path = "/"
+        unhealthy_threshold = "2"
+    }
   
-# }
+}
 
-# resource "aws_lb_listener" "http" {
-#     load_balancer_arn = aws_lb.this.arn
-#     port = "80"
-#     protocol = "TCP"
+resource "aws_lb_listener" "http" {
+    load_balancer_arn = aws_lb.this.arn
+    port = "80"
+    protocol = "HTTP" # according to ai example
+    # protocol = "TCP"
 
-#     default_action {
-#         type = "forward"
-#         target_group_arn = aws_lb_target_group.this.arn
-#     }
-# }
+    default_action {
+        type = "forward"
+        target_group_arn = aws_lb_target_group.this.arn
+    }
+}
 
 resource "aws_ecs_service" "this" {
     name = var.aws_ecs_service_name
@@ -95,11 +105,11 @@ resource "aws_ecs_service" "this" {
         assign_public_ip = var.aws_ecs_service_network_configuration_assign_public_ip
     }
 
-    # load_balancer {
-    #     target_group_arn = aws_lb_target_group.this.arn
-    #     container_name = var.aws_ecs_task_definition_container_name
-    #     container_port = var.aws_security_group_port
-    # }
+    load_balancer {
+        target_group_arn = aws_lb_target_group.this.arn
+        container_name = var.aws_ecs_task_definition_container_name
+        container_port = var.aws_security_group_port
+    }
     # depends_on = [ aws_iam_policy.this ]
 }
 
