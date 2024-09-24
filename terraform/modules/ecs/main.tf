@@ -85,8 +85,7 @@ resource "aws_ecs_task_definition" "this" {
 resource "aws_ecs_service" "this" {
     name = var.aws_ecs_service_name
     cluster = aws_ecs_cluster.this.id
-    # task_definition = aws_ecs_task_definition.this.arn
-    task_definition = "arn:aws:ecs:eu-west-2:757721680185:task-definition/HelloWorldHexRubyWebRailsTask:1"
+    task_definition = aws_ecs_task_definition.this.arn
     desired_count = var.aws_ecs_service_desired_count
     launch_type = var.aws_ecs_service_lauch_type
 
