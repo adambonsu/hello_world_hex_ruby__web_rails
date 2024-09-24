@@ -27,3 +27,19 @@ resource "aws_subnet" "private" {
     Name = "${var.environment}-private-subnet-${count.index + 1}"
   }
 }
+
+# Internet Gateway for the public subnet
+resource "aws_internet_gateway" "this" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+      Name = var.aws_internet_gateway_name
+  }
+}
+
+# Route the public subnet traffic through the IGW
+resource "aws_route" "internet_access" {
+  route_table_id         = aws_vpc.main.main_route_table_id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.this.id
+
+}

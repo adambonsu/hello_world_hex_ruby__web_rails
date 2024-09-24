@@ -11,3 +11,19 @@ variable "aws_region" {
 module "vpc" {
   source = "/modules/vpc"
 }
+
+module "ecs" {
+  source = "/modules/ecs"
+  vpc_id = module.vpc.vpc_id
+  public_subnet_ids = module.vpc.public_subnet_ids
+}
+
+output "vpc_id" {
+    description = "ID of the created VPC"
+    value = module.vpc.vpc_id
+}
+
+output "public_subnet_ids" {
+    description = "IDs of the public subnets"
+    value = module.vpc.public_subnet_ids
+}

@@ -8,6 +8,13 @@ module "vpc" {
     availability_zones = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
 }
 
+module "ecs" {
+    source = "../../modules/ecs"
+    vpc_id = module.vpc.vpc_id
+    public_subnet_ids = module.vpc.public_subnet_ids
+    execution_role_arn = "arn:aws:iam::757721680185:role/ecsTaskExecutionRole"
+}
+
 output "vpc_id" {
   description = "ID of the created VPC"
   value = module.vpc.vpc_id
@@ -22,4 +29,8 @@ output "public_subnet_ids" {
 output "private_subnet_ids" {
   description = "IDs of the created private subnets"
   value = module.vpc.private_subnet_ids
+}
+
+output "aws_ecs_cluster_arn" {
+    value = module.ecs.aws_ecs_cluster_arn
 }
