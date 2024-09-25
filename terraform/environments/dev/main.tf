@@ -36,3 +36,7 @@ output "private_subnet_ids" {
 output "aws_ecs_cluster_arn" {
     value = module.ecs.aws_ecs_cluster_arn
 }
+
+output "alb_dns_name" {
+    value = module.ecs.alb_dns_name
+}
