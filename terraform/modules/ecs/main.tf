@@ -1,27 +1,43 @@
-resource "aws_security_group" "this" {
+resource "aws_security_group" "ecs_service" {
     vpc_id = var.vpc_id
-
-    ingress {
-        from_port = var.aws_security_group_port
-        to_port = var.aws_security_group_port
-        protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    egress {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_port_80" {
-  security_group_id = aws_security_group.this.id
+resource "aws_vpc_security_group_ingress_rule" "ecs_service" {
+  security_group_id = aws_security_group.ecs_service.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = var.aws_security_group_port
+  ip_protocol       = "tcp"
+  to_port           = var.aws_security_group_port
+}
+
+resource "aws_vpc_security_group_ingress_rule" "ecs_service_accepts_alb_traffic" {
+  security_group_id = aws_security_group.ecs_service.id
+  referenced_security_group_id = aws_security_group.alb.id
+  ip_protocol       = "-1"
+}
+
+resource "aws_vpc_security_group_egress_rule" "ecs_service" {
+  security_group_id = aws_security_group.ecs_service.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
+}
+
+resource "aws_security_group" "alb" {
+    vpc_id = var.vpc_id
+}
+
+resource "aws_vpc_security_group_ingress_rule" "alb" {
+  security_group_id = aws_security_group.alb.id
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 80
   ip_protocol       = "tcp"
   to_port           = 80
+}
+
+resource "aws_vpc_security_group_egress_rule" "alb" {
+  security_group_id = aws_security_group.alb.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
 }
 
 resource "aws_ecs_cluster" "this" {
@@ -38,6 +54,7 @@ resource "aws_ecs_task_definition" "this" {
         {
             name = var.aws_ecs_task_definition_container_name
             image = var.container_image
+            environment = [{"name": "ALLOWED_HOSTS", "value": aws_lb.this.dns_name}]
             cpu = 1024
             essential = true
             memory = var.aws_ecs_task_definition_memory
@@ -58,7 +75,7 @@ resource "aws_lb" "this" {
     internal = false
     load_balancer_type = "application"
     subnets = var.public_subnet_ids
-    security_groups = [aws_security_group.this.id]
+    security_groups = [aws_security_group.alb.id]
 }
 
 resource "aws_lb_target_group" "this" {
@@ -100,7 +117,7 @@ resource "aws_ecs_service" "this" {
     launch_type = var.aws_ecs_service_lauch_type
 
     network_configuration {
-        security_groups = [aws_security_group.this.id]
+        security_groups = [aws_security_group.ecs_service.id]
         subnets = var.public_subnet_ids
         assign_public_ip = var.aws_ecs_service_network_configuration_assign_public_ip
     }

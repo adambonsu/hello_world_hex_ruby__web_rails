@@ -18,7 +18,7 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y curl libjemalloc2 && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-# Set production environment
+# Set environment
 ENV RAILS_ENV="development" \
     BUNDLE_WITHOUT=""
 

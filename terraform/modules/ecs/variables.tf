@@ -30,7 +30,6 @@ variable "aws_ecs_task_definition_container_name" {
 variable "container_image" {
     description = "Container Image"
     type        = string
-    default     = "757721680185.dkr.ecr.eu-west-2.amazonaws.com/hello-world-hex-ruby-web-rails:v2"
 }
 
 variable "execution_role_arn" {
