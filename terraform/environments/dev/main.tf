@@ -1,3 +1,10 @@
+terraform {
+  backend "s3" {
+    bucket = "hello-world-hex-ruby-web-rails.remote-backend"
+    key = "terraform/dev/terraform.tfstate"
+    region = "eu-west-2"
+  }
+}
 module "vpc" {
     source = "../../modules/vpc"
     availability_zones = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
