@@ -48,14 +48,14 @@ resource "aws_ecs_task_definition" "this" {
     family = var.aws_ecs_task_definition_family
     requires_compatibilities = ["FARGATE"]
     network_mode             = "awsvpc"
-    cpu                      = 1024
+    cpu                      = var.aws_ecs_task_definition_cpu
     memory                   = var.aws_ecs_task_definition_memory
     container_definitions = jsonencode([
         {
             name = var.aws_ecs_task_definition_container_name
             image = var.container_image
             environment = [{"name": "ALLOWED_HOSTS", "value": aws_lb.this.dns_name}]
-            cpu = 1024
+            cpu = var.aws_ecs_task_definition_cpu
             essential = true
             memory = var.aws_ecs_task_definition_memory
             portMappings = [
@@ -100,8 +100,7 @@ resource "aws_lb_target_group" "this" {
 resource "aws_lb_listener" "http" {
     load_balancer_arn = aws_lb.this.arn
     port = "80"
-    protocol = "HTTP" # according to ai example
-    # protocol = "TCP"
+    protocol = "HTTP"
 
     default_action {
         type = "forward"
@@ -127,6 +126,5 @@ resource "aws_ecs_service" "this" {
         container_name = var.aws_ecs_task_definition_container_name
         container_port = var.aws_security_group_port
     }
-    # depends_on = [ aws_iam_policy.this ]
 }
 

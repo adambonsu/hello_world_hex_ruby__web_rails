@@ -77,3 +77,8 @@ variable "aws_ecs_task_definition_memory" {
     description = "Memory"
     type        = number
 }
+
+variable "aws_ecs_task_definition_cpu" {
+    description = "Memory"
+    type        = number
+}

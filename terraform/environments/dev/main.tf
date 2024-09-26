@@ -9,13 +9,14 @@ module "vpc" {
 
 module "ecs" {
     source = "../../modules/ecs"
-    aws_ecs_cluster_name = "HelloWorldHexRubyWebRailsCluster20240924"
-    aws_ecs_service_desired_count = 3
+    aws_ecs_cluster_name = "HelloWorldHexRubyWebRailsCluster20240925"
+    aws_ecs_service_desired_count = 1
     aws_ecs_service_name = "HelloWorldHexRubyWebRailsService"
     aws_ecs_service_lauch_type = "FARGATE"
     aws_ecs_service_load_balancer_container_name = "HelloWorldHexRubyWebRailsContainerName"
     aws_ecs_service_network_configuration_assign_public_ip = true
     aws_ecs_task_definition_container_name = "HelloWorldHexRubyWebRailsCN"
+    aws_ecs_task_definition_cpu = 1024
     aws_ecs_task_definition_family = "HelloWorldHexRubyWebRails"
     aws_ecs_task_definition_memory = 2048
     aws_lb_name = "HelloWorldHexRubyWebRailsLB"

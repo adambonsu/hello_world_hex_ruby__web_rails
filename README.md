@@ -69,14 +69,26 @@ NB: If you encounter a `no basic auth credentials` error run this `eval $( aws e
 
 ## ECS
 
-* Task: defines how to run your container 
- - which containers to run, how many cpu's the container needs
-* Service: Launch Task to run 1 or more containers at the same time and connect them to Load Balancers
+### Set up environment
+Update the `container_image` in [the dev environment](./terraform/environments/dev/main.tf) to match the image pushed to the ECR
+Via the terminal launch the environment in the cloud:
+```bash
+cd terraform/environments/dev/
+tfswitch # select the latest terraform version
+terraform init
+terraform plan
+terraform apply --auto-approve
 
+```
+This will launch an ECS service serving the app behind an application load balancer
+Navigate to the `alb_dns_name` output to check that the app is being served as expected
+E.g `curl HelloWorldHexRubyWebRailsLB-333426525.eu-west-2.elb.amazonaws.com`
 
+### Destroy environment
+```bash
+terraform destroy --auto-approve
 
-1. Build an ECS cluster
-Create a new cluster
+```
 
 
 
