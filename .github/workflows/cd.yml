@@ -1,10 +1,7 @@
 name: CD
 run-name: "CD run by @${{ github.actor }}, event: ${{ github.event_name }}"
 on:
-    pull_request:
-        branches: [main]
-    push:
-        branches: [main]
+    workflow_call:
     workflow_dispatch:
 
 jobs:
