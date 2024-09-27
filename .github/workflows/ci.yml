@@ -13,10 +13,11 @@ jobs:
               uses: ruby/setup-ruby@v1
               with:
                   ruby-version: '3.3.5'
+            - name: Export environment variables so that they're available in subsequent steps
+              run: |
+                  echo "ENV_GITHUB_USERNAME=${{ secrets.ENV_GITHUB_USERNAME }}" >> $GITHUB_ENV
+                  echo "ENV_GITHUB_PERSONAL_ACCESS_TOKEN=${{ secrets.ENV_GITHUB_PERSONAL_ACCESS_TOKEN }}" >> $GITHUB_ENV
             - name: Install dependencies
-              env:
-                  GITHUB_USERNAME: ${{ vars.ENV_GITHUB_USERNAME }}
-                  GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.ENV_GITHUB_PERSONAL_ACCESS_TOKEN }}
               run: |
                   gem install bundler
                   cd ./src
