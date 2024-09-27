@@ -37,10 +37,21 @@ cd -
 ```
 
 
+## build docker locally
+Set your `GITHUB_USERNAME` and `GITHUB_PERSONAL_ACCESS_TOKEN` environment variables, then run...
+```bash
+docker build \
+                  -f ./docker/Dockerfile \
+                  -t hello-world-hex-ruby--web-rails:$APP_VERSION \
+                  --secret id=github-username,env=GITHUB_USERNAME \
+                  --secret id=github-personal-access-token,env=GITHUB_PERSONAL_ACCESS_TOKEN \
+                  ./src
+```
+
 ### Start server
 Build and start the docker container
 ```bash
-docker-compose -f ./docker/docker-compose.yml --env-file .env up --build
+docker-compose -f ./docker/docker-compose.yml --build
 
 ```
 

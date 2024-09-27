@@ -7,8 +7,6 @@
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
 ARG RUBY_VERSION=3.3.5
 FROM --platform=linux/amd64 docker.io/library/ruby:$RUBY_VERSION-slim AS base
-ARG GITHUB_USERNAME
-ARG GITHUB_PERSONAL_ACCESS_TOKEN
 
 # Rails app lives here
 WORKDIR /rails
@@ -36,7 +34,9 @@ RUN apt-get update -qq && \
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
+RUN --mount=type=secret,id=github-username,env=GITHUB_USERNAME \
+    --mount=type=secret,id=github-personal-access-token,env=GITHUB_PERSONAL_ACCESS_TOKEN \
+    bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
