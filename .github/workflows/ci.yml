@@ -30,15 +30,17 @@ jobs:
     build:
         needs: test
         runs-on: ubuntu-latest
+        env:
+            APP_VERSION: ${{ github.sha }}
         steps:
             - uses: actions/checkout@v2
             - name: Build Docker image
-              run: docker build -t hello-world-hex-ruby--web-rails:${{ github.sha }} .
+              run: docker build -t hello-world-hex-ruby--web-rails:$APP_VERSION .
             - name: Push to ECR
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
               run: |
                 aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
-                docker tag hello-world-hex-ruby--web-rails:${{ github.sha }} ${{ secrets.ECR_REGISTRY }}/hello-world-hex-ruby--web-rails:${{ github.sha }}
-                docker push ${{ secrets.ECR_REGISTRY }}/hello-world-hex-ruby--web-rails:${{ github.sha }}
+                docker tag hello-world-hex-ruby--web-rails:$APP_VERSION ${{ secrets.ECR_REGISTRY }}/hello-world-hex-ruby--web-rails:$APP_VERSION
+                docker push ${{ secrets.ECR_REGISTRY }}/hello-world-hex-ruby--web-rails:$APP_VERSION
