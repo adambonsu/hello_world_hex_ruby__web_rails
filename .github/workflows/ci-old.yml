@@ -1,4 +1,4 @@
-name: CI
+name: CI-OLD
 run-name: "CI run by @${{ github.actor }}, event: ${{ github.event_name }}"
 on:
     pull_request:
