@@ -29,10 +29,15 @@ module "ecs" {
     aws_lb_name = "HelloWorldHexRubyWebRailsLB"
     aws_lb_target_group_name = "HelloWorldHexRubyWebRailsTG"
     aws_security_group_port = 3000
-    container_image = "757721680185.dkr.ecr.eu-west-2.amazonaws.com/hello-world-hex-ruby--web-rails:v4"
+    container_image = var.container_image
     execution_role_arn = "arn:aws:iam::757721680185:role/ecsTaskExecutionRole"
     public_subnet_ids = module.vpc.public_subnet_ids
     vpc_id = module.vpc.vpc_id
+}
+
+variable "container_image" {
+  description = "Container image"
+  type        = string
 }
 
 output "vpc_id" {

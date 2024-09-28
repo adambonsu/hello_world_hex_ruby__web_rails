@@ -16,6 +16,7 @@ module "ecs" {
   source = "/modules/ecs"
   vpc_id = module.vpc.vpc_id
   public_subnet_ids = module.vpc.public_subnet_ids
+  container_image = var.container_image
 }
 
 output "vpc_id" {
