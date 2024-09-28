@@ -11,10 +11,14 @@ concurrency:
     cancel-in-progress: true
 jobs:
     ci:
+        permissions:
+          contents: read
+          packages: write 
         uses: ./.github/workflows/ci.yml
 
     cd:
         permissions:
             contents: read
+            packages: write 
         uses: ./.github/workflows/cd.yml
         needs: ci
