@@ -35,6 +35,7 @@ jobs:
         environment: production
         env:
             APP_VERSION: ${{ github.sha }}
+            DOCKER_IMAGE: hello-world-hex-ruby-web-rails
             GITHUB_USERNAME: ${{ vars.ENV_GITHUB_USERNAME }}
             GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.ENV_GITHUB_PERSONAL_ACCESS_TOKEN }}
         steps:
@@ -43,7 +44,7 @@ jobs:
               run: |
                 docker build \
                   -f ./docker/Dockerfile \
-                  -t hello-world-hex-ruby--web-rails:$APP_VERSION \
+                  -t $DOCKER_IMAGE:$APP_VERSION \
                   --secret id=github-username,env=GITHUB_USERNAME \
                   --secret id=github-personal-access-token,env=GITHUB_PERSONAL_ACCESS_TOKEN \
                   ./src
@@ -53,5 +54,5 @@ jobs:
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
               run: |
                 aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
-                docker tag hello-world-hex-ruby--web-rails:$APP_VERSION ${{ secrets.ECR_REGISTRY }}/hello-world-hex-ruby--web-rails:$APP_VERSION
-                docker push ${{ secrets.ECR_REGISTRY }}/hello-world-hex-ruby--web-rails:$APP_VERSION
+                docker tag $DOCKER_IMAGE:$APP_VERSION ${{ secrets.ECR_REGISTRY }}:$APP_VERSION
+                docker push ${{ secrets.ECR_REGISTRY }}:$APP_VERSION
