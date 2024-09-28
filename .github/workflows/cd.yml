@@ -20,4 +20,5 @@ jobs:
               run: |
                   cd terraform/environments/dev
                   terraform init
+                  terraform destroy -auto-approve
                   terraform apply -var="container_image=${{ secrets.ECR_REGISTRY }}:${{ github.sha }}" -auto-approve
