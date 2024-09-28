@@ -1,0 +1,53 @@
+name: CI
+run-name: "CI run by @${{ github.actor }}, event: ${{ github.event_name }}"
+on:
+    pull_request:
+        branches: [main]
+    push:
+        branches: [main]
+    workflow_dispatch:
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        environment: production
+        steps:
+            - uses: actions/checkout@v2
+            - name: Set up Ruby
+              uses: ruby/setup-ruby@v1
+              with:
+                  ruby-version: '3.3.5'
+            - name: Install dependencies
+              env:
+                  GITHUB_USERNAME: ${{ vars.ENV_GITHUB_USERNAME }}
+                  GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.ENV_GITHUB_PERSONAL_ACCESS_TOKEN }}
+              run: |
+                  gem install bundler
+                  cd ./src
+                  bundle install
+            - name: Run tests
+              run: |
+                  cd ./src
+                  bundle exec rake test
+    build:
+        needs: test
+        runs-on: ubuntu-latest
+        env:
+            APP_VERSION: ${{ github.sha }}
+        steps:
+            - uses: actions/checkout@v2
+            - name: Build Docker image
+              run: |
+                docker build \
+                  -f ./docker/Dockerfile \
+                  -t hello-world-hex-ruby--web-rails:$APP_VERSION \
+                  --secret id=github-username,env=GITHUB_USERNAME \
+                  --secret id=github-personal-access-token,env=GITHUB_PERSONAL_ACCESS_TOKEN \
+                  ./src
+            - name: Push to ECR
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              run: |
+                aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
+                docker tag hello-world-hex-ruby--web-rails:$APP_VERSION ${{ secrets.ECR_REGISTRY }}/hello-world-hex-ruby--web-rails:$APP_VERSION
+                docker push ${{ secrets.ECR_REGISTRY }}/hello-world-hex-ruby--web-rails:$APP_VERSION
