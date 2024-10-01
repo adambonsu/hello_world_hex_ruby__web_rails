@@ -6,6 +6,7 @@ on:
 jobs:
     linting:
         runs-on: ubuntu-latest
+        environment: production
         permissions:
             contents: read
         steps:
@@ -16,6 +17,14 @@ jobs:
               with:
                   ruby-version: '3.3.5'
                   bundler-cache: true
+            - name: Install dependencies
+              env:
+                GITHUB_USERNAME: ${{ vars.ENV_GITHUB_USERNAME }}
+                GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.ENV_GITHUB_PERSONAL_ACCESS_TOKEN }}
+              run: |
+                gem install bundler
+                cd ./src
+                bundle install
             - name: Linting
               run: |
                   cd ./src
