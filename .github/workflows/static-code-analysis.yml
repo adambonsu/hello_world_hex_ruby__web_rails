@@ -1,0 +1,22 @@
+name: StaticCodeAnalysis
+run-name: "Static Code Analysis run by @${{ github.actor }}, event: ${{ github.event_name }}"
+on:
+    workflow_call:
+    workflow_dispatch:
+jobs:
+    linting:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Set up Ruby
+              uses: ruby/setup-ruby@v1
+              with:
+                  ruby-version: '3.3.5'
+                  bundler-cache: true
+            - name: Linting
+              run: |
+                  cd ./src
+                  bundle exec rake dev:lint

@@ -1,0 +1,35 @@
+name: FunctionalTests
+run-name: "Functional Tests run by @${{ github.actor }}, event: ${{ github.event_name }}"
+on:
+    workflow_call:
+    workflow_dispatch:
+jobs:
+    unit-tests:
+        runs-on: ubuntu-latest
+        environment: production
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Set up Ruby
+              uses: ruby/setup-ruby@v1
+              with:
+                  ruby-version: '3.3.5'
+                  bundler-cache: true
+            - name: Install dependencies
+              env:
+                GITHUB_USERNAME: ${{ vars.ENV_GITHUB_USERNAME }}
+                GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.ENV_GITHUB_PERSONAL_ACCESS_TOKEN }}
+              run: |
+                gem install bundler
+                cd ./src
+                bundle install
+            - name: Run tests
+              run: |
+                cd ./src
+                bundle exec rake test
+            - name: Upload Coverage Report
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: coverage
+                  path: coverage/
