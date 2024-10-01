@@ -3,7 +3,9 @@ run-name: "CD run by @${{ github.actor }}, event: ${{ github.event_name }}"
 on:
     workflow_call:
     workflow_dispatch:
-
+concurrency:
+    group: cd ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
 jobs:
     deploy:
         runs-on: ubuntu-latest
