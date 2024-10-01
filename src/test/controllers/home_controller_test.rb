@@ -1,5 +1,5 @@
 # test/controllers/home_controller_test.rb
-require 'test_helper'
+require "test_helper"
 
 class HomeControllerTest < ActionDispatch::IntegrationTest
     test "should get index" do
@@ -9,6 +9,6 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
 
     test "should display Hello World" do
         get home_index_url
-        assert_select 'h1', 'Hello, from HelloWorldHexRuby::Core!'
+        assert_select "h1", "Hello, from HelloWorldHexRuby::Core!"
     end
 end

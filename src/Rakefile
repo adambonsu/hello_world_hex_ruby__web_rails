@@ -4,3 +4,16 @@
 require_relative "config/application"
 
 Rails.application.load_tasks
+
+namespace :dev do
+    desc 'Format check'
+    task :lint do
+      sh 'bundle exec rubocop'
+    end
+    namespace :lint do
+      desc 'Format fix'
+      task :fix do
+        sh 'bundle exec rubocop -A'
+      end
+    end
+  end
