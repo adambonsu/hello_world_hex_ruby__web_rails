@@ -34,4 +34,4 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                   name: static-security-report
-                  path: static-security-report.html
+                  path: src/static-security-report.html
