@@ -25,13 +25,27 @@ jobs:
                 gem install bundler
                 cd ./src
                 bundle install --with test
-            - name: Run tests
+            - name: Static Application Security Test (SAST) - Talisman - Detect secrets in commits
+              uses: carhartl/talisman-secrets-scan-action@v1.4.0
+            - name: Static Application Security Test (SAST) - Brakeman - Analyze Ruby on Rails code for potential security vulnerabilities
               run: |
                 cd ./src
-                brakeman . -f html -o static-security-report.html
-            - name: Upload Static Security Report
+                brakeman . -f html -o sast-brakeman-report.html
+            - name: Upload Static Application Security Test (SAST) - Brakeman Report
               if: always()
               uses: actions/upload-artifact@v4
               with:
-                  name: static-security-report
-                  path: src/static-security-report.html
+                  name: sast-brakeman-report
+                  path: src/sast-brakeman-report.html
+            - name: Security Composition Analysis (SCA) - OWASP Dependency Check
+              uses: dependency-check/Dependency-Check_Action@main
+              with:
+                      project: 'hello_world_hex_ruby__web_rails'
+                      path: './src'
+                      format: 'HTML'
+                      out: 'dependency-check'
+            - name: Upload OWASP Dependency Check Report
+              uses: actions/upload-artifact@v4
+              with:
+                      name: dependency-check
+                      path: ${{github.workspace}}/src/dependency-check
