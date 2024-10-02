@@ -43,9 +43,9 @@ jobs:
                       project: 'hello_world_hex_ruby__web_rails'
                       path: './src'
                       format: 'HTML'
-                      out: 'dependency-check'
+                      out: './src/dependency-check'
             - name: Upload OWASP Dependency Check Report
               uses: actions/upload-artifact@v4
               with:
-                      name: dependency-check
+                      name: sca-dependency-check
                       path: ${{github.workspace}}/src/dependency-check
