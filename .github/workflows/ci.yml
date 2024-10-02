@@ -22,6 +22,12 @@ jobs:
             contents: read
         secrets: inherit
         uses: ./.github/workflows/functional-tests.yml
+    security-tests:
+        needs: static-code-analysis
+        permissions:
+            contents: read
+        secrets: inherit
+        uses: ./.github/workflows/security-tests.yml
     build-image:
         needs: functional-tests
         permissions:

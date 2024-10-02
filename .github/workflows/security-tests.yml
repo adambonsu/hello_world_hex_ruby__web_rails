@@ -1,0 +1,37 @@
+name: SecurityTests
+run-name: "Security Tests run by @${{ github.actor }}, event: ${{ github.event_name }}"
+on:
+    workflow_call:
+    workflow_dispatch:
+jobs:
+    static-security-tests:
+        runs-on: ubuntu-latest
+        environment: production
+        permissions:
+            contents: read
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Set up Ruby
+              uses: ruby/setup-ruby@v1
+              with:
+                  ruby-version: '3.3.5'
+                  bundler-cache: true
+            - name: Install dependencies
+              env:
+                GITHUB_USERNAME: ${{ vars.ENV_GITHUB_USERNAME }}
+                GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.ENV_GITHUB_PERSONAL_ACCESS_TOKEN }}
+              run: |
+                gem install bundler
+                cd ./src
+                bundle install --with test
+            - name: Run tests
+              run: |
+                cd ./src
+                brakeman . -f html -o static-security-report.html
+            - name: Upload Static Security Report
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: static-security-report
+                  path: static-security-report.html
