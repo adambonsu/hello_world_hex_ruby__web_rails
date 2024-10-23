@@ -7,8 +7,13 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
         assert_response :success
     end
 
-    test "should display Hello World" do
+    test "should display Hello World by default" do
         get home_index_url
-        assert_select "h1", "Hello, from HelloWorldHexRuby::Core!"
+        assert_select "h1", "Hello, World!"
+    end
+
+    test "should display Hello with custom username" do
+        get home_index_url(name: "Nefertari")
+        assert_select "h1", "Hello, Nefertari!"
     end
 end
