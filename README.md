@@ -18,6 +18,13 @@ GITHUB_USERNAME=YOUR_GITHUB_USERNAME
 GITHUB_PERSONAL_ACCESS_TOKEN=YOUR_GITHUB_PERSONAL_ACCESS_TOKEN
 
 ```
+
+Then run the following command to inject these environment variables into your shell:
+```bash
+export `cat .env | xargs`
+
+```
+
 Create a clean development environment
 ```bash
 rvm use 3.3.5
