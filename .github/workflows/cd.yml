@@ -28,3 +28,16 @@ jobs:
                   terraform apply \
                     -var="container_image=${{ secrets.ECR_REGISTRY }}:${{ github.sha }}" \
                     -auto-approve
+            - name: Get ALB DNS Name
+              id: alb_dns
+              run: |
+                  echo "::set-output name=alb_dns::$(terraform output -raw alb_dns_name)"
+              working-directory: terraform/environments/dev
+            - name: Test User Flows against deployment
+              env:
+                  APP_HOST: http://${{ steps.alb_dns.outputs.alb_dns }}
+                  APP_HOST_PORT: 3000
+              run: |
+                  echo "Running User flows pointing at ${APP_HOST}:${APP_HOST_PORT}..."
+                  cucumber features
+              working-directory: src/test/user_flows

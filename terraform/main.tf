@@ -28,3 +28,8 @@ output "public_subnet_ids" {
     description = "IDs of the public subnets"
     value = module.vpc.public_subnet_ids
 }
+
+output "alb_dns_name" {
+    description = "DNS name of the ALB"
+    value = module.ecs.alb_dns_name
+}
