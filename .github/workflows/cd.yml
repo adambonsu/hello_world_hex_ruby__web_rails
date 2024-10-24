@@ -46,6 +46,10 @@ jobs:
                 gem install bundler
                 bundle install --with test
               working-directory: src
+            - name: Install Google Chrome browser
+              run: |
+                chmod +x ./scripts/InstallChrome.sh
+                ./scripts/InstallChrome.sh 
             - name: Test User Flows against deployment
               env:
                   APP_HOST: http://${{ steps.alb_dns.outputs.alb_dns }}
