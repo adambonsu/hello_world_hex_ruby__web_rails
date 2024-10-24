@@ -1,7 +1,6 @@
 module World
-
     def informal_greetings
-        @informal_greetings ||= [ 
+        @informal_greetings ||= [
             "Hey!",
             "Heya!",
             "Hey there!",
@@ -21,7 +20,7 @@ module World
     end
 
     def formal_greetings
-        @formal_greetings ||= [ 
+        @formal_greetings ||= [
             "Hello",
             "Hi there"
         ]
@@ -51,7 +50,6 @@ module World
     def greetings
         @greetings ||= informal_greetings + formal_greetings + time_related_formal_greetings + initial_greetings
     end
-
 end
 
 World(World)

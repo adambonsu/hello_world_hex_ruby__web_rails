@@ -1,5 +1,5 @@
-require 'capybara/cucumber'
-require 'selenium-webdriver'
+require "capybara/cucumber"
+require "selenium-webdriver"
 
 Capybara.default_driver = :selenium_chrome
 Capybara.app_host = ENV["APP_HOST"] || "http://localhost"
