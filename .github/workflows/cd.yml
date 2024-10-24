@@ -33,11 +33,24 @@ jobs:
               run: |
                   echo "::set-output name=alb_dns::$(terraform output -raw alb_dns_name)"
               working-directory: terraform/environments/dev
+            - name: Set up Ruby
+              uses: ruby/setup-ruby@v1
+              with:
+                  ruby-version: '3.3.5'
+                  bundler-cache: true
+            - name: Install dependencies
+              env:
+                GITHUB_USERNAME: ${{ vars.ENV_GITHUB_USERNAME }}
+                GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.ENV_GITHUB_PERSONAL_ACCESS_TOKEN }}
+              run: |
+                gem install bundler
+                bundle install --with test
+              working-directory: src
             - name: Test User Flows against deployment
               env:
                   APP_HOST: http://${{ steps.alb_dns.outputs.alb_dns }}
                   APP_HOST_PORT: 3000
               run: |
-                  echo "Running User flows pointing at ${APP_HOST}:${APP_HOST_PORT}..."
+                  echo "Running User flows pointing at ${APP_HOST}:${APP_HOST_PORT}"
                   cucumber features
               working-directory: src/test/user_flows
