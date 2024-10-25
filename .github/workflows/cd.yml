@@ -94,7 +94,8 @@ jobs:
             - name: Test User Flows against deployment
               env:
                   APP_HOST: http://${{ steps.alb_dns.outputs.alb_dns }}
+                  APP_HOST_PORT: 80
               run: |
-                  echo "Running User flows pointing at ${APP_HOST}"
+                  echo "Running User flows pointing at ${APP_HOST}:${APP_HOST_PORT}"
                   xvfb-run --auto-servernum bundle exec cucumber features
               working-directory: src/test/user_flows
