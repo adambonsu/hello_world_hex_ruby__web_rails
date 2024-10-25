@@ -23,7 +23,7 @@ jobs:
             - name: Terraform Init
               run: |
                   terraform init
-                  working-directory: terraform/environments/dev
+              working-directory: terraform/environments/dev
             - name: Create and use new workspace
               run: |
                   terraform workspace new ${{ github.sha }}
