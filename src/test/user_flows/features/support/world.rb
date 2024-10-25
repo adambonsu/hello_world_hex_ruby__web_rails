@@ -1,6 +1,6 @@
 module World
     def greetings
-        @greetings ||= ["Hello"]
+        @greetings ||= [ "Hello" ]
     end
 end
 
