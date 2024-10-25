@@ -18,6 +18,13 @@ GITHUB_USERNAME=YOUR_GITHUB_USERNAME
 GITHUB_PERSONAL_ACCESS_TOKEN=YOUR_GITHUB_PERSONAL_ACCESS_TOKEN
 
 ```
+
+Then run the following command to inject these environment variables into your shell:
+```bash
+export `cat .env | xargs`
+
+```
+
 Create a clean development environment
 ```bash
 rvm use 3.3.5
@@ -42,7 +49,8 @@ Set your `GITHUB_USERNAME` and `GITHUB_PERSONAL_ACCESS_TOKEN` environment variab
 ```bash
 docker build \
                   -f ./docker/Dockerfile \
-                  -t hello-world-hex-ruby--web-rails:$APP_VERSION \
+                  -t hello-world-hex-ruby--web-rails:$(git rev-parse HEAD) \
+                  --platform linux/amd64 \
                   --secret id=github-username,env=GITHUB_USERNAME \
                   --secret id=github-personal-access-token,env=GITHUB_PERSONAL_ACCESS_TOKEN \
                   ./src
@@ -53,6 +61,18 @@ Build and start the docker container
 ```bash
 docker-compose -f ./docker/docker-compose.yml --build
 
+```
+Alternatively run the prep-built docker image
+```bash
+docker build \
+        -f ./docker/Dockerfile \
+        -t hello-world-hex-ruby--web-rails:$(git rev-parse HEAD) \
+        --platform linux/amd64 \
+        --secret id=github-username,env=GITHUB_USERNAME \
+        --secret id=github-personal-access-token,env=GITHUB_PERSONAL_ACCESS_TOKEN \
+        ./src
+
+docker run --platform linux/amd64 -p 3000:3000 hello-world-hex-ruby--web-rails:$(git rev-parse HEAD)
 ```
 
 
@@ -76,6 +96,12 @@ docker push 757721680185.dkr.ecr.eu-west-2.amazonaws.com/hello-world-hex-ruby-we
 ```
 
 NB: If you encounter a `no basic auth credentials` error run this `eval $( aws ecr get-login --no-include-email --region eu-west-2 )` before attempting to push again
+
+### Download image from registry
+```bash
+aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+
+```
 
 
 ## ECS
