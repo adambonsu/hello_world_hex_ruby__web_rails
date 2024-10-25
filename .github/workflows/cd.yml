@@ -20,25 +20,25 @@ jobs:
                   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   aws-region: eu-west-2
+            - name: Create and use new workspace
+              run: |
+                  terraform workspace new ${{ github.sha }}
+                  terraform workspace select ${{ github.sha }}
             - name: Terraform Init
               run: |
                   terraform init
               working-directory: terraform/environments/dev
-            - name: Terraform Destroy
-              run: |
-                  terraform destroy \
-                    -var="container_image=${{ secrets.ECR_REGISTRY }}:${{ github.sha }}" \
-                    -auto-approve
-              working-directory: terraform/environments/dev
-            - name: Wait for resources to be fully deleted
-              run: |
-                   sleep 60
             - name: Terraform Apply
               run: |
                   terraform apply \
                     -var="container_image=${{ secrets.ECR_REGISTRY }}:${{ github.sha }}" \
                     -auto-approve
               working-directory: terraform/environments/dev
+            - name: Cleanup workspace
+              if: always()
+              run: |
+                  terraform workspace select default
+                  terraform workspace delete ${{ github.sha }}
             - name: Get ALB DNS Name
               id: alb_dns
               run: |
