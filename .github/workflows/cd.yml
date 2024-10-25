@@ -91,6 +91,16 @@ jobs:
               run: |
                   pkill -f chrome || true
                   sleep 2
+            - name: Wait for service to be ready
+              env:
+                APP_HOST: http://${{ steps.alb_dns.outputs.alb_dns }}
+                APP_HOST_PORT: 80
+              uses: nev7n/wait_for_response@v1
+              with:
+                  url: "${{ env.APP_HOST }}:${{ env.APP_HOST_PORT }}"
+                  responseCode: 200
+                  timeout: 300000
+                  interval: 10000
             - name: Test User Flows against deployment
               env:
                   APP_HOST: http://${{ steps.alb_dns.outputs.alb_dns }}
