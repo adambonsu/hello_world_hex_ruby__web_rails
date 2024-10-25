@@ -67,11 +67,18 @@ jobs:
                 ls -l /usr/local/bin
                 which google-chrome
                 rm chromedriver-linux64.zip
+                chromedriver --version
+                google-chrome --version
+            - name: Set up virtual display
+              run: |
+                  sudo apt-get install -y xvfb
+                  export DISPLAY=:99
+                  Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
             - name: Test User Flows against deployment
               env:
                   APP_HOST: http://${{ steps.alb_dns.outputs.alb_dns }}
                   APP_HOST_PORT: 3000
               run: |
                   echo "Running User flows pointing at ${APP_HOST}:${APP_HOST_PORT}"
-                  cucumber features
+                  xvfb-run --auto-servernum bundle exec cucumber features
               working-directory: src/test/user_flows
