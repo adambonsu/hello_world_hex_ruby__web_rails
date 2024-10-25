@@ -20,14 +20,14 @@ jobs:
                   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   aws-region: eu-west-2
+            - name: Terraform Init
+              run: |
+                  terraform init
+                  working-directory: terraform/environments/dev
             - name: Create and use new workspace
               run: |
                   terraform workspace new ${{ github.sha }}
                   terraform workspace select ${{ github.sha }}
-            - name: Terraform Init
-              run: |
-                  terraform init
-              working-directory: terraform/environments/dev
             - name: Terraform Apply
               run: |
                   terraform apply \
