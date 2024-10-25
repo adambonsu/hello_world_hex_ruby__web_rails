@@ -31,7 +31,8 @@ jobs:
             - name: Get ALB DNS Name
               id: alb_dns
               run: |
-                  echo "::set-output name=alb_dns::$(terraform output -raw alb_dns_name)"
+                  # echo "::set-output name=alb_dns::$(terraform output -raw alb_dns_name)"
+                  echo "alb_dns=$(terraform output -raw alb_dns_name)" >> $GITHUB_OUTPUT
               working-directory: terraform/environments/dev
             - name: Set up Ruby
               uses: ruby/setup-ruby@v1
@@ -93,8 +94,7 @@ jobs:
             - name: Test User Flows against deployment
               env:
                   APP_HOST: http://${{ steps.alb_dns.outputs.alb_dns }}
-                  APP_HOST_PORT: 3000
               run: |
-                  echo "Running User flows pointing at ${APP_HOST}:${APP_HOST_PORT}"
+                  echo "Running User flows pointing at ${APP_HOST}"
                   xvfb-run --auto-servernum bundle exec cucumber features
               working-directory: src/test/user_flows
