@@ -1,4 +1,4 @@
 fileignoreconfig:
   - filename: .github/workflows/cd.yml
-    checksum: 413e17eecaf24ea2874b0047b0c5d1b078d1c754b89aaa850584180136d4f877
+    checksum: 3b9f26a56dbaabb776d1b59730f26fd4d9d8c703aa0d738588bd49e5d82ce2e4
     version: ""
