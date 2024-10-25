@@ -20,12 +20,16 @@ jobs:
                   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   aws-region: eu-west-2
-            - name: Deploy to AWS
+            - name: Terraform Destroy
               run: |
-                  terraform init
                   terraform destroy \
                     -var="container_image=${{ secrets.ECR_REGISTRY }}:${{ github.sha }}" \
-                    -auto-approve && \
+                    -auto-approve
+              working-directory: terraform/environments/dev
+            - name: Wait for resources to be fully deleted
+              run: sleep 60
+            - name: Terraform Apply
+              run: |
                   terraform apply \
                     -var="container_image=${{ secrets.ECR_REGISTRY }}:${{ github.sha }}" \
                     -auto-approve
