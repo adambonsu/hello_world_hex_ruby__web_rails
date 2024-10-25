@@ -4,10 +4,10 @@ require "selenium-webdriver"
 Capybara.register_driver :chrome do |app|
     options = Selenium::WebDriver::Chrome::Options.new
     options.add_argument("--disable-dev-shm-usage")
-    options.add_argument('--disable-features=VizDisplayCompositor')
-    options.add_argument('--disable-features=UsbDeviceMonitoring')
-    options.add_argument('--disable-features=PowerMonitoring')
-    options.add_argument('--disable-features=NetworkService')
+    options.add_argument("--disable-features=VizDisplayCompositor")
+    options.add_argument("--disable-features=UsbDeviceMonitoring")
+    options.add_argument("--disable-features=PowerMonitoring")
+    options.add_argument("--disable-features=NetworkService")
     options.add_argument("--disable-gpu")
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
