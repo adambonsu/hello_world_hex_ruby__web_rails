@@ -74,6 +74,14 @@ jobs:
                   sudo apt-get install -y xvfb
                   export DISPLAY=:99
                   Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+            - name: Debug Chrome
+              run: |
+                  google-chrome --version
+                  which google-chrome
+                  ls -l $(which google-chrome)
+                  google-chrome --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 about:blank &
+                  sleep 5
+                  sudo ps aux | grep chrome
             - name: Test User Flows against deployment
               env:
                   APP_HOST: http://${{ steps.alb_dns.outputs.alb_dns }}
