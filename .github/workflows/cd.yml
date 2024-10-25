@@ -64,6 +64,8 @@ jobs:
 
                 unzip chromedriver-linux64.zip
                 sudo mv chromedriver-linux64/chromedriver /usr/local/bin/
+                ls -l /usr/local/bin
+                which google-chrome
                 rm chromedriver-linux64.zip
             - name: Test User Flows against deployment
               env:
