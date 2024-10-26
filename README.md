@@ -11,6 +11,14 @@ docker-compose -f ./src/docker-compose.yml run --no-deps web rails new . --force
 ```
 
 ## Development
+### Set up the Talisman pre-commit hook
+Install Talisman Globally:
+```bash
+curl --silent https://raw.githubusercontent.com/thoughtworks/talisman/master/global_install_scripts/install.bash | bash
+
+```
+
+
 ### Set up local environment
 Create an .env file in the root and populate it as follows:
 ```
@@ -42,6 +50,7 @@ cd src
 bundle install
 cd -
 ```
+
 
 
 ## build docker locally
