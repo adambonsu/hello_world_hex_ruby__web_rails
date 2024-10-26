@@ -18,6 +18,27 @@ curl --silent https://raw.githubusercontent.com/thoughtworks/talisman/master/glo
 
 ```
 
+Set up Talisman as a pre-commit hook by adding it to your global Git template directory:
+```bash
+git config --global init.templatedir '~/.git-template'
+mkdir -p ~/.git-template/hooks
+curl --silent https://raw.githubusercontent.com/thoughtworks/talisman/master/global_install_scripts/talisman_hook_script.bash > ~/.git-template/hooks/pre-commit
+chmod +x ~/.git-template/hooks/pre-commit
+
+```
+
+Manually copy the hook script to this repository's hooks:
+```bash
+cp ~/.git-template/hooks/pre-commit /path/to/this/repo/.git/hooks/
+
+```
+
+Include these entries in your `~/.bash_profile` (assuming you are using a bash shell)
+```bash
+export TALISMAN_DEBUG=true
+export TALISMAN_BINARY=$(which talisman)
+```
+
 
 ### Set up local environment
 Create an .env file in the root and populate it as follows:
