@@ -35,7 +35,7 @@ cp ~/.git-template/hooks/pre-commit /path/to/this/repo/.git/hooks/
 
 Include these entries in your `~/.bash_profile` (assuming you are using a bash shell)
 ```bash
-export TALISMAN_DEBUG=true
+export TALISMAN_DEBUG=
 export TALISMAN_BINARY=$(which talisman)
 ```
 
