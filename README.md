@@ -1,4 +1,6 @@
-# README
+# Hello World Hex Ruby - Web Rails
+
+[![Build Status](https://github.com/adambonsu/hello_world_hex_ruby__web_rails/actions/workflows/ci.yml/badge.svg)](https://github.com/adambonsu/hello_world_hex_ruby__web_rails/actions/workflows/ci-cd.yml)
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
